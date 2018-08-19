@@ -1,0 +1,5 @@
+---
+supervisord:
+  main_config_file: /usr/local/etc/supervisord.conf
+  prefix:
+    config: /usr/local/etc/supervisord.d

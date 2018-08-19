@@ -1,0 +1,19 @@
+---
+- name: Create drop-in configuration directory
+  file: path="{{ item.path }}" state="{{ item.state }}"
+  loop_control:
+    label: "{{ item.path }}"
+  with_items:
+    - path: "{{ supervisord.prefix.config }}"
+      state: directory
+
+- name: Configure drop-in configuration directory
+  ini_file: path="{{ item.path }}" section="{{ item.section }}" option="{{ item.option }}" value="{{ item.value }}"
+  loop_control:
+    label: "{{ item.path }}"
+  with_items:
+    - path: "{{ supervisord.main_config_file }}"
+      section: include
+      option: files
+      value: "{{ supervisord.prefix.config }}/*.conf"
+  notify: Restart Supervisord

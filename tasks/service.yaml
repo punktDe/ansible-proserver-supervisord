@@ -1,8 +1,7 @@
 ---
-- name: Enable the supervisord service
-  ansible.builtin.lineinfile:
-    path: /etc/rc.conf
-    regexp: "^supervisord_enable="
-    line: 'supervisord_enable="YES"'
-  notify:
-    - Start Supervisord
+- name: Start Supervisord
+  ansible.builtin.service:
+    name: supervisord
+    state: started
+    enabled: yes
+  register: supervisord_service_result

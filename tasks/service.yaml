@@ -1,5 +1,5 @@
 ---
-- name: Start Supervisord
+- name: Start and enable Supervisord
   ansible.builtin.service:
     name: supervisord
     state: started

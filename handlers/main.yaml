@@ -1,12 +1,6 @@
 ---
-- name: Start Supervisord
-  service:
-    name: supervisord
-    state: started
-  register: supervisord_service_result
-
 - name: Restart Supervisord
-  service:
+  ansible.builtin.service:
     name: supervisord
     state: restarted
   when: not (supervisord_service_result is defined and supervisord_service_result.changed)

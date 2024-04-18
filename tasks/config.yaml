@@ -1,19 +1,27 @@
 ---
 - name: Create drop-in configuration directory
-  file: path="{{ item.path }}" state="{{ item.state }}"
-  loop_control:
-    label: "{{ item.path }}"
-  with_items:
-    - path: "{{ supervisord.prefix.config }}"
-      state: directory
+  ansible.builtin.file:
+    path: "{{ supervisord.prefix.config }}"
+    state: directory
+    owner: root
+    mode: "0755"
 
-- name: Configure drop-in configuration directory
-  ini_file: path="{{ item.path }}" section="{{ item.section }}" option="{{ item.option }}" value="{{ item.value }}"
-  loop_control:
-    label: "{{ item.path }}"
-  with_items:
-    - path: "{{ supervisord.main_config_file }}"
-      section: include
-      option: files
-      value: "{{ supervisord.prefix.config }}/*.conf"
+- name: Include the configuration directory in the main config file
+  community.general.ini_file:
+    path: "{{ supervisord.main_config_file }}"
+    section: include
+    option: files
+    value: "{{ supervisord.prefix.config }}/*.conf"
+    owner: root
+    mode: "0644"
+  notify: Restart Supervisord
+
+- name: Configure the supervisord socket path
+  community.general.ini_file:
+    path: "{{ supervisord.prefix.config }}/unix_socket.conf"
+    section: supervisorctl
+    option: serverurl
+    value: "serverurl=unix:///var/run/supervisor/supervisor.sock"
+    mode: "0644"
+    owner: root
   notify: Restart Supervisord

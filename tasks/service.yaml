@@ -1,11 +1,8 @@
 ---
-- name: Enable service
-  lineinfile: path="{{ item.path }}" regexp="{{ item.regexp }}" line="{{ item.line }}"
-  loop_control:
-    label: "{{ item.path }}"
-  with_items:
-    - path: /etc/rc.conf
-      regexp: "^supervisord_enable="
-      line: 'supervisord_enable="YES"'
+- name: Enable the supervisord service
+  ansible.builtin.lineinfile:
+    path: /etc/rc.conf
+    regexp: "^supervisord_enable="
+    line: 'supervisord_enable="YES"'
   notify:
     - Start Supervisord

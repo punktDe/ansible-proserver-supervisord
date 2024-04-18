@@ -1,3 +1,6 @@
 ---
-- import_tasks: config.yaml
-- import_tasks: service.yaml
+- name: Configure Supervisord
+  ansible.builtin.include_tasks: config.yaml
+
+- name: Install the Supervisord service
+  ansible.builtin.include_tasks: service.yaml

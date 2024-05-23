@@ -18,10 +18,10 @@
 
 - name: Configure the supervisord socket path
   community.general.ini_file:
-    path: "{{ supervisord.prefix.config }}/unix_socket.conf"
+    path: "{{ supervisord.main_config_file }}"
     section: supervisorctl
     option: serverurl
-    value: "serverurl=unix:///var/run/supervisor/supervisor.sock"
-    mode: "0644"
+    value: "unix:///var/run/supervisor/supervisor.sock"
     owner: root
+    mode: "0644"
   notify: Restart Supervisord
